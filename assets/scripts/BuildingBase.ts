@@ -13,6 +13,9 @@ export default class BuildingBase extends cc.Component {
     @property([cc.SpriteFrame])
     damagedSprites: cc.SpriteFrame[] = [];
 
+    @property(cc.Node)
+    buildAnim: cc.Node = null;
+
     currentLevel: number = 0;
 
     maxLevel: number = 5;

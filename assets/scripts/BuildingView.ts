@@ -7,12 +7,25 @@ import BuildingStorage from "./BuildingStorage";
 
 @ccclass
 export default class BuildingView extends cc.Component {
-
     static updateSprite(building: BuildingBase) {
+        const animationComponent = building.buildAnim.getComponent(cc.Animation);
+        if (animationComponent) {
+            const onFinished = () => {
+                animationComponent.off('finished', onFinished, this);
+                this.addSprites(building);
+            };
+            animationComponent.on('finished', onFinished, this);
+            animationComponent.play("build");
+        }
+        else
+            this.addSprites(building);
+    }
+    static addSprites(building: BuildingBase) {
+        const spriteComponent = building.getComponent(cc.Sprite);
         if (building.getState() instanceof BuildingStateWhole) {
-            building.getComponent(cc.Sprite).spriteFrame = building.wholeSprites[building.currentLevel - 1];
+            spriteComponent.spriteFrame = building.wholeSprites[building.currentLevel - 1];
         } else {
-            building.getComponent(cc.Sprite).spriteFrame = building.damagedSprites[building.currentLevel - 1];
+            spriteComponent.spriteFrame = building.damagedSprites[building.currentLevel - 1];
         }
     }
 }
