@@ -1,61 +1,61 @@
 import {BuildingState} from "./BuildingState";
 import BuildingView from "./BuildingView";
 import BuildingStateWhole from "./BuildingStateWhole";
-import BuildingStorage from "./BuildingStorage";
 
 const {ccclass, property} = cc._decorator;
 
+export const BUILDING_NAMES: Array<string> = [
+    'bear'
+]
+export const BUILDING_DAMAGE = "_dmg"
+
 @ccclass
 export default class BuildingBase extends cc.Component {
-    @property([cc.SpriteFrame])
-    wholeSprites: cc.SpriteFrame[] = [];
 
-    @property([cc.SpriteFrame])
-    damagedSprites: cc.SpriteFrame[] = [];
+    @property(cc.Node) buildAnim: cc.Node = null;
 
-    @property(cc.Node)
-    buildAnim: cc.Node = null;
+    public currentLevel: number = 0;
 
-    currentLevel: number = 0;
+    public maxLevel: number = 5;
 
-    maxLevel: number = 5;
+    public minLevel: number = 1;
 
-    minLevel: number = 1;
+    public buildIndex: number = -1;
 
-    private state: BuildingState = new BuildingStateWhole(this);
+    private _state: BuildingState = new BuildingStateWhole(this);
+
     static readonly EVENTS = {
         STATE_CHANGED: "state-changed",
     };
 
     setState(state:BuildingState) {
-        this.state = state;
+        this._state = state;
     }
 
     getState(): BuildingState {
-        return this.state;
+        return this._state;
     }
 
     levelUp() {
         if (this.currentLevel < this.maxLevel) {
-            this.state.levelUp();
+            this._state.levelUp();
             this._changeState();
         }
     }
 
     damage() {
         if (this.currentLevel >= this.minLevel) {
-            this.state.damage();
+            this._state.damage();
             this._changeState();
         }
     }
 
     repair() {
-        this.state.repair();
+        this._state.repair();
         this._changeState();
     }
 
     private _changeState() {
-        BuildingView.updateSprite(this);
         this.node.emit(BuildingBase.EVENTS.STATE_CHANGED, this);
     }
 }

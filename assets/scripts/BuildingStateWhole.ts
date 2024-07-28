@@ -1,22 +1,23 @@
 import { BuildingState } from "./BuildingState";
 import BuildingBase from "./BuildingBase";
-import BuildingStateDamaged from "./BuildingStateDamaged";
 import BuildingView from "./BuildingView";
+import BuildingStateDamaged from "./BuildingStateDamaged";
 
 export default class BuildingStateWhole implements BuildingState {
-    private building: BuildingBase;
+    private _building: BuildingBase;
 
     constructor(building: BuildingBase) {
-        this.building = building;
+        this._building = building;
     }
 
     levelUp() {
-        this.building.currentLevel++;
-        BuildingView.updateSprite(this.building);
+        this._building.currentLevel++;
+        BuildingView.updateSprite(this._building);
     }
 
     damage() {
-        this.building.setState(new BuildingStateDamaged(this.building));
+        this._building.setState(new BuildingStateDamaged(this._building));
+        BuildingView.updateSprite(this._building);
     }
 
     repair() {

@@ -4,24 +4,24 @@ import BuildingStateWhole from "./BuildingStateWhole";
 import BuildingView from "./BuildingView";
 
 export default class BuildingStateDamaged implements BuildingState {
-    private building: BuildingBase;
+    private _building: BuildingBase;
 
     constructor(building: BuildingBase) {
-        this.building = building;
+        this._building = building;
     }
 
     levelUp() {
     }
 
     damage() {
-        if (this.building.currentLevel > this.building.minLevel) {
-            this.building.currentLevel--;
+        if (this._building.currentLevel > this._building.minLevel) {
+            this._building.currentLevel--;
+            BuildingView.updateSprite(this._building);
         }
-        BuildingView.updateSprite(this.building);
-
     }
 
     repair() {
-        this.building.setState(new BuildingStateWhole(this.building));
+        this._building.setState(new BuildingStateWhole(this._building));
+        BuildingView.updateSprite(this._building);
     }
 }

@@ -2,8 +2,9 @@ import BuildingStateWhole from "./BuildingStateWhole";
 
 const {ccclass, property} = cc._decorator;
 import BuildingStateDamaged from "./BuildingStateDamaged";
-import BuildingBase from "./BuildingBase";
+import BuildingBase, {BUILDING_DAMAGE, BUILDING_NAMES} from "./BuildingBase";
 import BuildingStorage from "./BuildingStorage";
+import {TextureLoader} from "./TextureLoader";
 
 @ccclass
 export default class BuildingView extends cc.Component {
@@ -23,9 +24,9 @@ export default class BuildingView extends cc.Component {
     static addSprites(building: BuildingBase) {
         const spriteComponent = building.getComponent(cc.Sprite);
         if (building.getState() instanceof BuildingStateWhole) {
-            spriteComponent.spriteFrame = building.wholeSprites[building.currentLevel - 1];
+            TextureLoader.setTexture(spriteComponent, BUILDING_NAMES[building.buildIndex] + '_' + building.currentLevel);
         } else {
-            spriteComponent.spriteFrame = building.damagedSprites[building.currentLevel - 1];
+            TextureLoader.setTexture(spriteComponent, BUILDING_NAMES[building.buildIndex] + BUILDING_DAMAGE + '_' + building.currentLevel);
         }
     }
 }
