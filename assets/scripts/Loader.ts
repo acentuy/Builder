@@ -12,11 +12,11 @@ export default class Loader extends cc.Component {
 
     start() {
         TextureLoader.init().then(() => {
-            this._loadBuilMenu();
+            this._loadBuildMenu();
         });
     }
 
-    private _loadBuilMenu() {
+    private _loadBuildMenu() {
         BuildingStorage.buildings.forEach((building: BuildingBase, index: number) => {
             const slotNode = cc.instantiate(this.slotBuildMenu);
             const slot: SlotBuildMenu = slotNode.getComponent(SlotBuildMenu);
