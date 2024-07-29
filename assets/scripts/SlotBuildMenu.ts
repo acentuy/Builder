@@ -1,24 +1,18 @@
 import BuildingStateWhole from "./BuildingStateWhole";
-import BuildingBase, {BUILDING_DAMAGE, BUILDING_NAMES} from "./BuildingBase";
+import BuildingBase, { BUILDING_DAMAGE, BUILDING_NAMES } from "./BuildingBase";
 import BuildingStorage from "./BuildingStorage";
 import BuildingView from "./BuildingView";
-import {TextureLoader} from "./TextureLoader";
+import { TextureLoader } from "./TextureLoader";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class SlotBuildMenu extends cc.Component {
-
     @property(cc.Node) buyButton: cc.Node = null;
-
     @property(cc.Node) buildButton: cc.Node = null;
-
     @property(cc.Node) gradeSprites: cc.Node = null;
-
     @property(cc.Sprite) progressSprite: cc.Sprite = null;
-
     @property(cc.Sprite) upgradeSprite: cc.Sprite = null;
-
     @property([cc.Node]) activeStarsNode: cc.Node[] = [];
 
     private building: BuildingBase = null;
@@ -28,7 +22,7 @@ export default class SlotBuildMenu extends cc.Component {
         this.building = BuildingStorage.buildings[buildIndex];
         this.buildingIndex = buildIndex;
         this.building.node.on(BuildingBase.EVENTS.STATE_CHANGED, this._updateGrades, this);
-        TextureLoader.setTexture(this.progressSprite, BUILDING_NAMES[this.buildingIndex] + '_' + this.building.minLevel);
+        TextureLoader.setTexture(this.progressSprite, `${BUILDING_NAMES[this.buildingIndex]}_${this.building.minLevel}`);
     }
 
     private _updateGrades() {
@@ -39,18 +33,18 @@ export default class SlotBuildMenu extends cc.Component {
     }
 
     private _wholeUpgrade() {
-        TextureLoader.setTexture(this.progressSprite, BUILDING_NAMES[this.buildingIndex] + '_' + this.building.currentLevel);
+        TextureLoader.setTexture(this.progressSprite, `${BUILDING_NAMES[this.buildingIndex]}_${this.building.currentLevel}`);
         this.activeStarsNode[this.building.currentLevel - 1].active = true;
         if (this.building.currentLevel < this.building.maxLevel)
-            TextureLoader.setTexture(this.upgradeSprite, BUILDING_NAMES[this.buildingIndex] + '_' + (this.building.currentLevel + 1));
+            TextureLoader.setTexture(this.upgradeSprite, `${BUILDING_NAMES[this.buildingIndex]}_${this.building.currentLevel + 1}`);
         else
             this.gradeSprites.active = false;
     }
 
     private _damageUpgrade() {
-        TextureLoader.setTexture(this.progressSprite, BUILDING_NAMES[this.buildingIndex] + BUILDING_DAMAGE + '_' + this.building.currentLevel);
-        TextureLoader.setTexture(this.upgradeSprite, BUILDING_NAMES[this.buildingIndex] + '_' + this.building.currentLevel);
-        if (this.building.currentLevel == this.building.maxLevel)
+        TextureLoader.setTexture(this.progressSprite, `${BUILDING_NAMES[this.buildingIndex]}${BUILDING_DAMAGE}_${this.building.currentLevel}`);
+        TextureLoader.setTexture(this.upgradeSprite, `${BUILDING_NAMES[this.buildingIndex]}_${this.building.currentLevel}`);
+        if (this.building.currentLevel === this.building.maxLevel)
             this.gradeSprites.active = true;
         else
             this.activeStarsNode[this.building.currentLevel].active = false;
@@ -66,7 +60,9 @@ export default class SlotBuildMenu extends cc.Component {
     }
 
     onUpgradeButtonClick() {
-        if (this.building.getState() instanceof BuildingStateWhole)  this.building.levelUp();
-        else this.building.repair();
+        if (this.building.getState() instanceof BuildingStateWhole)
+            this.building.levelUp();
+        else
+            this.building.repair();
     }
 }

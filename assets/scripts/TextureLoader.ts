@@ -4,11 +4,15 @@ export class TextureLoader {
     static init() {
         console.time(`[LOADTIME] all atlases`);
         return new Promise<void>((resolve, reject) => {
-            this.loadAtlas('UIAndAnim').then(() =>
-                this.loadAtlas('bear').then(() => {
-                    console.timeEnd(`[LOADTIME] all atlases`);
-                    resolve();
-                }).catch((err) => {
+            this.loadAtlas('raw').then(() =>
+                this.loadAtlas('bear').then(() =>
+                    this.loadAtlas('items').then(() => {
+                        console.timeEnd(`[LOADTIME] all atlases`);
+                        resolve();
+                    }).catch((err) => {
+                        reject(err);
+                    })
+                ).catch((err) => {
                     reject(err);
                 })
             ).catch((err) => {
@@ -16,6 +20,7 @@ export class TextureLoader {
             });
         });
     }
+
 
     static setTexture(sprite: cc.Sprite, texture: string, cb?: (sf: cc.SpriteFrame) => void) {
         const spriteFrame = this.sfMap.get(texture);

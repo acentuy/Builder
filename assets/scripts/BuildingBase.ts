@@ -1,5 +1,4 @@
 import {BuildingState} from "./BuildingState";
-import BuildingView from "./BuildingView";
 import BuildingStateWhole from "./BuildingStateWhole";
 
 const {ccclass, property} = cc._decorator;
